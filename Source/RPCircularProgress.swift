@@ -200,12 +200,13 @@ open class RPCircularProgress: UIView {
      Updates the progress bar to the given value with the optional properties
 
      - parameter progress:     The progress to update to, pinned between `0` and `1`
+     - parameter startProgress:     The progress to start from, pinned between `0` and `1`. May be overridden by current progress
      - parameter animated:     Whether or not the update should be animated (defaults to `true`)
      - parameter initialDelay: Sets an initial delay before the animation begins
      - parameter duration:     Sets the overal duration that the animation should complete within
      - parameter completion:   An optional closure to execute after the animation completes
      */
-    open func updateProgress(_ progress: CGFloat, animated: Bool = true, initialDelay: CFTimeInterval = 0, duration: CFTimeInterval? = nil, completion: CompletionBlock? = nil) {
+    open func updateProgress(_ progress: CGFloat, startProgress: CGFloat = 0.0, animated: Bool = true, initialDelay: CFTimeInterval = 0, duration: CFTimeInterval? = nil, completion: CompletionBlock? = nil) {
         let pinnedProgress = pin(progress)
         if animated {
 
@@ -221,7 +222,7 @@ open class RPCircularProgress: UIView {
             // Get current progress (to avoid jumpy behavior)
             // Basic animations have their value reset to the original once the animation is finished
             // since only the presentation layer is animating
-            var currentProgress: CGFloat = 0
+            var currentProgress: CGFloat = pin(startProgress)
             if let presentationLayer = progressLayer.presentation() as ProgressLayer! {
                 currentProgress = presentationLayer.progress
             }
